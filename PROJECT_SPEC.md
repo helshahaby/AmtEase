@@ -9,6 +9,8 @@
 - **Challenge:** Digital Assistants: Evolution to 2030 — Public Sector
 - **Live app:** [AmtEase AI](https://amtease.lovable.app)
 - **Pitch video:** [Watch the project pitch on YouTube](https://youtu.be/N0n5MQYxjcQ)
+- **Strategy paper:** [Vision, personas, value proposition, and public-sector impact](STRATEGY_PAPER.md)
+- **Technical documentation:** [Architecture, mock APIs, security, and deployment](TECHNICAL_DOCUMENTATION.md)
 
 ## 1. Product vision
 
@@ -247,7 +249,23 @@ Target WCAG 2.2 AA:
 | Pasted letter contains personal data | Encourage redaction; minimize retention |
 | User asks for binding legal advice | Explain limitation and point to an appropriate authority |
 
-## 13. Test plan
+## 13. Short technical documentation and implementation boundaries
+
+A consolidated technical overview is maintained in [`TECHNICAL_DOCUMENTATION.md`](TECHNICAL_DOCUMENTATION.md). It covers architecture, orchestrator/agent coordination, proposed mock API contracts, official data sources and provenance, security/privacy, error recovery, limitations, and deployment.
+
+### Architecture and coordination summary
+
+The user interface sends text or a correctable speech transcript to one conversation orchestrator. The orchestrator resolves intent, asks for clarification where required, retrieves a curated service entry, advances a deterministic workflow, applies guardrails, and returns a structured answer with source metadata. Voice, catalogue, and API providers should be adapters so they can be replaced without changing workflow rules. Logical modules do not imply separate autonomous agents or deployed microservices.
+
+### Mock APIs and source data
+
+Proposed demo routes include `POST /api/intent/resolve`, `GET /api/services/search`, `GET /api/services/:id`, workflow start/answer/checklist routes, `POST /api/handoff/summary`, and demo scenario/reset routes. These are design contracts, not confirmed live endpoints. Responses must be deterministic in scripted demo mode and labelled simulated. Catalogue records should carry an official URL, language, verification status, and last-checked date. Initial discovery references are the official Austrian portal, its form search, and its service landing pages.
+
+### Security, errors, and deployment
+
+Use synthetic demo data, minimize logs and personal data, keep privileged keys server-side, validate inputs, treat pasted documents as untrusted content, and never render raw model HTML. Provide accessible retry, text fallback, and human referral paths for provider failures, unknown services, ambiguous requests, and conflicting sources. The hosted app is available at [amtease.lovable.app](https://amtease.lovable.app); local build commands are conditional on a source tree and `package.json` being present. Production deployment and authenticated government integrations require separate testing, security/privacy/accessibility review, and authorization.
+
+## 14. Test plan
 
 Use deterministic test fixtures and record actual results.
 
@@ -280,7 +298,7 @@ Use deterministic test fixtures and record actual results.
 ### Reporting
 For each test record: ID, input, expected intent/action, actual output, source link, pass/fail, defect notes, build/version. Do not publish a pass rate until the tests have run.
 
-## 14. Delivery checklist
+## 15. Delivery checklist
 
 - [ ] Working prototype or high-fidelity mockup for 1–2 priority use cases.
 - [ ] Strategic concept and user journey.
@@ -293,6 +311,6 @@ For each test record: ID, input, expected intent/action, actual output, source l
 - [ ] Clear separation of implemented, simulated, and planned capabilities.
 - [ ] Repository free of secrets and personal data.
 
-## 15. Definition of done
+## 16. Definition of done
 
 The prototype is ready for a judging walkthrough when a user can start from an everyday-language request, receive a correct or appropriately clarified intent, follow a supported workflow, see official source links, receive a structured checklist, and access a human fallback. At least one ambiguous scenario and one failure scenario must be demonstrated. All simulated behavior must be clearly labelled.

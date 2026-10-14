@@ -9,6 +9,8 @@
 - **Challenge:** Digital Assistants: Evolution to 2030 — Public Sector
 - **Live app:** [AmtEase AI](https://amtease.lovable.app)
 - **Pitch video:** [Watch the project pitch on YouTube](https://youtu.be/N0n5MQYxjcQ)
+- **Strategy paper:** [Vision, personas, value proposition, and public-sector impact](STRATEGY_PAPER.md)
+- **Technical documentation:** [Architecture, mock APIs, security, and deployment](TECHNICAL_DOCUMENTATION.md)
 
 ## 1. Overview
 
@@ -182,6 +184,21 @@ Replace sample text and status only after reviewing the official source. Do not 
 6. Demonstrate the human handoff summary.
 7. End by showing the source link, demo-mode label, and text alternative to voice.
 
+### Repeatable demo scenarios
+
+Use these scenarios to show both the happy path and safe failure behavior. Reset the app between scenarios where a reset control is available.
+
+| Scenario | Suggested prompt | What to demonstrate |
+|---|---|---|
+| Residence registration | “I moved last week. Where do I tell the authorities, and what do I need?” | Intent routing, a clarifying question if needed, official source link, checklist, and unknown details |
+| Passport renewal | “My passport expires soon. How do I renew it?” | Service discovery, simple explanation, and no invented fees or processing times |
+| Explain a letter | “Can you explain this official letter in plain English?” | Separate quoted letter facts from the assistant's explanation; remind users to redact personal identifiers |
+| Ambiguous request | “I need a new document.” | Ask what kind of document rather than guessing |
+| Unsupported complex case | “My residence situation is unusual. Am I eligible?” | State the limitation and offer official/human support instead of a legal determination |
+| Voice/API failure | Deny microphone permission or simulate an unavailable service if the demo supports it | Text fallback, clear error, retry, and no false success claim |
+
+These are recommended walkthrough scenarios, not a claim that every branch has been tested in the current hosted build. Mark any simulated response clearly during the demo.
+
 ## 12. Evaluation plan
 
 Map tests to the challenge rubric:
@@ -230,18 +247,31 @@ amtease-ai/
 
 This is a suggested structure; adjust it to the actual repository and do not claim files exist until they do.
 
-## 14. Local development (template)
+## 14. Setup and local development
 
-The exact commands depend on the repository that implements the prototype. For a Vite-based implementation, the usual flow is:
+### Try the live demo
+
+Open [AmtEase AI](https://amtease.lovable.app). The live app is the easiest way to explore the concept without installing dependencies.
+
+### Clone the repository
+
+```bash
+git clone https://github.com/helshahaby/AmtEase.git
+cd AmtEase
+```
+
+**Repository note:** the repository listing currently exposes documentation, the pitch deck, challenge brief, and demo video; a local application source tree and `package.json` could not be confirmed from the listed files. Therefore, local execution is conditional on the source code and package manifest being present.
+
+If `package.json` exists in the repository root, inspect its scripts first:
 
 ```bash
 npm install
-npm run dev
-npm run build
-npm run test
+npm run
 ```
 
-Ensure the relevant scripts exist in `package.json` before publishing these commands as verified. Keep API keys server-side or in a provider's secure configuration; never commit secrets or put privileged keys in browser code.
+Then run the development command actually declared by the project (commonly `npm run dev` for a Vite app). Only run build or test commands if matching scripts are listed. If the application source is in a subdirectory, change into that directory first. Do not create a `.env` file unless the source code documents the required variables; keep all privileged API keys server-side and never commit secrets.
+
+For architecture, proposed mock API contracts, security, error handling, and deployment guidance, see [`TECHNICAL_DOCUMENTATION.md`](TECHNICAL_DOCUMENTATION.md). These describe intended design and must not be interpreted as proof that every endpoint or integration is live.
 
 ## 15. Limitations and roadmap
 
